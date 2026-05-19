@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climbing The Dungeon</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+    <div id="ui-overlay"></div>
+  </div>
+  <script>
+  if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
+      const r = typeof radii === 'number' ? radii : (radii?.[0] ?? 0);
+      const clamped = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
+      this.moveTo(x + clamped, y);
+      this.lineTo(x + w - clamped, y);
+      this.arcTo(x + w, y, x + w, y + clamped, clamped);
+      this.lineTo(x + w, y + h - clamped);
+      this.arcTo(x + w, y + h, x + w - clamped, y + h, clamped);
+      this.lineTo(x + clamped, y + h);
+      this.arcTo(x, y + h, x, y + h - clamped, clamped);
+      this.lineTo(x, y + clamped);
+      this.arcTo(x, y, x + clamped, y, clamped);
+      this.closePath();
+      return this;
+    };
+  }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
