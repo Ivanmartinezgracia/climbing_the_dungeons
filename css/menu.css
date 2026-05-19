@@ -136,9 +136,13 @@
 }
 
 .buy-char-btn {
-  font-size: 0.75rem !important;
-  padding: 0.4rem 1rem !important;
-  min-width: auto !important;
+  font-size: 0.7rem !important;
+  padding: 0.35rem 0.5rem !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0.2rem 0 0 0 !important;
+  letter-spacing: 0 !important;
+  box-sizing: border-box !important;
   border-color: #f0c040 !important;
   color: #f0c040 !important;
   background: rgba(240, 192, 64, 0.12) !important;
@@ -146,6 +150,13 @@
 
 .buy-char-btn:hover {
   background: rgba(240, 192, 64, 0.25) !important;
+}
+
+.buy-char-btn:disabled {
+  border-color: #665 !important;
+  color: #665 !important;
+  background: rgba(100, 100, 60, 0.08) !important;
+  cursor: not-allowed !important;
 }
 
 /* Dungeon Select */
