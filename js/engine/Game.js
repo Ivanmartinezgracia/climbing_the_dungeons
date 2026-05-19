@@ -385,11 +385,8 @@ export class Game {
           this.items.splice(i, 1);
         } else if (item.type === 'health') {
           this.player.heal(item.value);
-          this.particles.emit(item.pos.x, this.pos.y, '#4f4', 8);
+          this.particles.emit(item.pos.x, item.pos.y, '#4f4', 8);
           this.items.splice(i, 1);
-        }
-      }
-    }
         }
       }
     }
