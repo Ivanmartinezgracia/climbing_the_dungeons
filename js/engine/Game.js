@@ -385,15 +385,11 @@ export class Game {
           this.items.splice(i, 1);
         } else if (item.type === 'health') {
           this.player.heal(item.value);
-          this.particles.emit(item.pos.x, item.pos.y, '#4f4', 8);
+          this.particles.emit(item.pos.x, this.pos.y, '#4f4', 8);
           this.items.splice(i, 1);
-        } else if (item.type === 'weapon') {
-          const result = this.player.pickupWeapon(item.weaponId, item.carried);
-          if (result.success) {
-            this.particles.emit(item.pos.x, item.pos.y, '#ff0', 8);
-            this.items.splice(i, 1);
-            this.dropWeaponAtPlayer(result.dropped);
-          }
+        }
+      }
+    }
         }
       }
     }
@@ -420,8 +416,10 @@ export class Game {
     this.autoSaveTimer++;
     if (this.autoSaveTimer >= 300) {
       this.autoSaveTimer = 0;
-      this.saveSystem.addCoins(0);
-      this.coins = this.saveSystem.getCoins();
+      const saved = this.saveSystem.getCoins();
+      if (this.coins > saved) {
+        this.saveSystem.addCoins(this.coins - saved);
+      }
     }
 
     this.camera.follow(this.player?.pos, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -505,8 +503,9 @@ export class Game {
 
   dropWeaponAtPlayer(dropped) {
     if (!dropped) return;
+    const angle = Math.random() * Math.PI * 2;
     this.items.push({
-      pos: { x: this.player.pos.x, y: this.player.pos.y },
+      pos: { x: this.player.pos.x + Math.cos(angle) * 28, y: this.player.pos.y + Math.sin(angle) * 28 },
       type: 'weapon',
       weaponId: dropped.weaponId,
       carried: { magAmmo: dropped.magAmmo, magSize: dropped.magSize },

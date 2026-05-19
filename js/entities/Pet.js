@@ -148,9 +148,10 @@ export class Pet {
     const dy = player.pos.y - this.pos.y;
     const distToPlayer = Math.sqrt(dx * dx + dy * dy);
 
+    const petRoom = dungeon?.getCurrentRoom(this.pos.x, this.pos.y);
     let oldTarget = this.target;
     let closestDist = Infinity;
-    if (aggroTarget && !aggroTarget.dead) {
+    if (aggroTarget && !aggroTarget.dead && dungeon?.getCurrentRoom(aggroTarget.pos.x, aggroTarget.pos.y) === petRoom) {
       this.target = aggroTarget;
       closestDist = Math.sqrt(
         (aggroTarget.pos.x - this.pos.x) ** 2 +
@@ -160,6 +161,8 @@ export class Pet {
       this.target = null;
       for (const e of enemies) {
         if (e.dead) continue;
+        const enemyRoom = dungeon?.getCurrentRoom(e.pos.x, e.pos.y);
+        if (petRoom !== enemyRoom) continue;
         const edx = e.pos.x - this.pos.x;
         const edy = e.pos.y - this.pos.y;
         const ed = Math.sqrt(edx * edx + edy * edy);
