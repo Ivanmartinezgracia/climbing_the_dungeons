@@ -148,10 +148,12 @@ export class Pet {
     const dy = player.pos.y - this.pos.y;
     const distToPlayer = Math.sqrt(dx * dx + dy * dy);
 
+    const playerRoom = dungeon?.getCurrentRoom(player.pos.x, player.pos.y);
     const petRoom = dungeon?.getCurrentRoom(this.pos.x, this.pos.y);
+    const allowedRoom = playerRoom ?? petRoom;
     let oldTarget = this.target;
     let closestDist = Infinity;
-    if (aggroTarget && !aggroTarget.dead && dungeon?.getCurrentRoom(aggroTarget.pos.x, aggroTarget.pos.y) === petRoom) {
+    if (aggroTarget && !aggroTarget.dead && dungeon?.getCurrentRoom(aggroTarget.pos.x, aggroTarget.pos.y) === allowedRoom) {
       this.target = aggroTarget;
       closestDist = Math.sqrt(
         (aggroTarget.pos.x - this.pos.x) ** 2 +
@@ -162,7 +164,7 @@ export class Pet {
       for (const e of enemies) {
         if (e.dead) continue;
         const enemyRoom = dungeon?.getCurrentRoom(e.pos.x, e.pos.y);
-        if (petRoom !== enemyRoom) continue;
+        if (enemyRoom !== allowedRoom) continue;
         const edx = e.pos.x - this.pos.x;
         const edy = e.pos.y - this.pos.y;
         const ed = Math.sqrt(edx * edx + edy * edy);
@@ -249,7 +251,8 @@ export class Pet {
         this.walkFrame = (this.walkFrame + 1) % 4;
       }
     } else {
-      if (this.target || distToPlayer > this.followRadius) {
+      const atTargetRange = this.target && closestDist < effAtkRange;
+      if (!atTargetRange && (this.target || distToPlayer > this.followRadius)) {
         this._stuckFrames = (this._stuckFrames || 0) + 1;
         if (this._stuckFrames > 8) {
           this.pos.x = player.pos.x + (Math.random() - 0.5) * 24;
