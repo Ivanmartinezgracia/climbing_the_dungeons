@@ -189,10 +189,26 @@ export class Enemy {
 
     if (this.knockbackTimer > 0) {
       this.knockbackTimer--;
-      this.pos.x += this.knockbackVx;
-      this.pos.y += this.knockbackVy;
+      const kbx = this.knockbackVx;
+      const kby = this.knockbackVy;
+      if (!dungeon?.isSolid(this.pos.x + kbx, this.pos.y, this.size)) this.pos.x += kbx;
+      if (!dungeon?.isSolid(this.pos.x, this.pos.y + kby, this.size)) this.pos.y += kby;
       this.knockbackVx *= 0.7;
       this.knockbackVy *= 0.7;
+    }
+
+    if (dungeon?.isSolid(this.pos.x, this.pos.y, this.size)) {
+      for (let attempt = 0; attempt < 8; attempt++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 2 + attempt * 2;
+        const nx = this.pos.x + Math.cos(angle) * dist;
+        const ny = this.pos.y + Math.sin(angle) * dist;
+        if (!dungeon.isSolid(nx, ny, this.size)) {
+          this.pos.x = nx;
+          this.pos.y = ny;
+          break;
+        }
+      }
     }
 
     if (this.alertTimer > 0) this.alertTimer--;

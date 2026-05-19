@@ -157,15 +157,7 @@ export class MainMenu {
   }
 
   startQuickGame() {
-    const chars = this.game.saveSystem.getUnlockedChars();
-    const dungeons = this.game.saveSystem.getUnlockedDungeons();
-    const charDef = CHARACTERS.find(c => c.id === chars[0]);
-    const dungeonDef = DUNGEONS.find(d => d.id === dungeons[0]);
-    if (charDef && dungeonDef) {
-      this.hide();
-      this.game.dungeonSelect.hide();
-      this.game.charSelect.hide();
-      this.game.startRun(dungeonDef.id, charDef);
-    }
+    this.hide();
+    this.game.charSelect.show();
   }
 }

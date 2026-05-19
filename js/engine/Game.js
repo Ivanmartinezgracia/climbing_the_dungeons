@@ -588,15 +588,31 @@ export class Game {
       this.player.pos.x = spawnRoom.centerX * 16;
       this.player.pos.y = spawnRoom.centerY * 16;
       if (this.dungeon.isSolid(this.player.pos.x, this.player.pos.y, this.player.size)) {
-        for (let ty = spawnRoom.y; ty < spawnRoom.y + spawnRoom.h; ty++) {
-          for (let tx = spawnRoom.x; tx < spawnRoom.x + spawnRoom.w; tx++) {
+        let found = false;
+        for (let ty = spawnRoom.y; ty < spawnRoom.y + spawnRoom.h && !found; ty++) {
+          for (let tx = spawnRoom.x; tx < spawnRoom.x + spawnRoom.w && !found; tx++) {
             if (!this.dungeon.isSolidTile(tx, ty)) {
               this.player.pos.x = tx * 16 + 8;
               this.player.pos.y = ty * 16 + 8;
-              break;
+              found = true;
             }
           }
-          if (!this.dungeon.isSolid(this.player.pos.x, this.player.pos.y, this.player.size)) break;
+        }
+        if (!found) {
+          for (let ty = 1; ty < this.dungeon.height - 1 && !found; ty++) {
+            for (let tx = 1; tx < this.dungeon.width - 1 && !found; tx++) {
+              if (!this.dungeon.isSolidTile(tx, ty)) {
+                this.player.pos.x = tx * 16 + 8;
+                this.player.pos.y = ty * 16 + 8;
+                found = true;
+              }
+            }
+          }
+        }
+        if (!found) {
+          this.dungeon.tiles[Math.floor(this.dungeon.height / 2) * this.dungeon.width + Math.floor(this.dungeon.width / 2)] = 0;
+          this.player.pos.x = Math.floor(this.dungeon.width / 2) * 16 + 8;
+          this.player.pos.y = Math.floor(this.dungeon.height / 2) * 16 + 8;
         }
       }
       if (this.player?.pets) {
@@ -627,7 +643,7 @@ export class Game {
       {
         minFloor: 1, weight: 4,
         make: (rng) => ({
-          hp: Math.floor((3 + rng.nextInt(0, 2)) * diffMult) + hpBonus,
+          hp: Math.floor((4 + rng.nextInt(0, 2)) * diffMult) + hpBonus,
           speed: 0.85 + Math.random() * 0.3,
           damage: 1 + dmgBonus,
           size: 14,
@@ -641,7 +657,7 @@ export class Game {
       {
         minFloor: 1, weight: 2,
         make: (rng) => ({
-          hp: Math.floor((2 + rng.nextInt(0, 1)) * diffMult) + Math.floor(hpBonus * 0.5),
+          hp: Math.floor((3 + rng.nextInt(0, 1)) * diffMult) + Math.floor(hpBonus * 0.5),
           speed: 1.2 + Math.random() * 0.3,
           damage: 1 + dmgBonus,
           size: 11,
@@ -655,7 +671,7 @@ export class Game {
       {
         minFloor: 2, weight: 2,
         make: (rng) => ({
-          hp: Math.floor((5 + rng.nextInt(0, 3)) * diffMult) + Math.floor(hpBonus * 1.5),
+          hp: Math.floor((6 + rng.nextInt(0, 3)) * diffMult) + Math.floor(hpBonus * 1.5),
           speed: 0.65 + Math.random() * 0.2,
           damage: 2 + dmgBonus,
           size: 20,
@@ -669,7 +685,7 @@ export class Game {
       {
         minFloor: 3, weight: 2,
         make: (rng) => ({
-          hp: Math.floor((3 + rng.nextInt(0, 2)) * diffMult) + hpBonus,
+          hp: Math.floor((4 + rng.nextInt(0, 2)) * diffMult) + hpBonus,
           speed: 0.9 + Math.random() * 0.2,
           damage: 1 + dmgBonus,
           size: 14,
@@ -683,7 +699,7 @@ export class Game {
       {
         minFloor: 5, weight: 1,
         make: (rng) => ({
-          hp: Math.floor((3 + rng.nextInt(0, 2)) * diffMult) + Math.floor(hpBonus * 1.2),
+          hp: Math.floor((4 + rng.nextInt(0, 2)) * diffMult) + Math.floor(hpBonus * 1.2),
           speed: 1.0 + Math.random() * 0.2,
           damage: 2 + dmgBonus,
           size: 14,
@@ -704,7 +720,7 @@ export class Game {
           room.centerX * 16,
           room.centerY * 16,
           {
-            hp: Math.floor(25 * diffMult) + hpBonus * 3,
+            hp: Math.floor(30 * diffMult) + hpBonus * 3,
             speed: 1.0,
             damage: 2 + dmgBonus,
             size: 22,

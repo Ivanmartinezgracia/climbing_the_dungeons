@@ -34,7 +34,7 @@ export class CharacterSelect {
         <div class="char-name" style="color:${char.color}">${char.name}</div>
         <div class="char-desc">${char.desc}</div>
         <div class="char-stats">❤${char.hp} ⚡${char.speed.toFixed(1)} ${WEAPONS[char.weaponId]?.icon ?? '🔫'}${WEAPONS[char.weaponId]?.name ?? ''}</div>
-        ${unlocked ? '<div class="char-owned">✓ Desbloqueado</div>' : `<div class="char-cost">${char.cost} monedas</div>`}
+        ${unlocked ? '<div class="char-owned">✓ Desbloqueado</div>' : `<div class="char-cost"><button class="menu-btn buy-char-btn" data-char="${char.id}" ${this.game.coins < char.cost ? 'disabled' : ''}>COMPRAR (${char.cost} 🪙)</button></div>`}
       `;
 
       if (unlocked || char.cost === 0) {
@@ -44,20 +44,25 @@ export class CharacterSelect {
           selectedId = char.id;
           document.getElementById('btn-select-char').disabled = false;
         };
-      } else {
-        card.onclick = () => {
-          if (this.game.coins >= char.cost) {
-            this.game.saveSystem.spendCoins(char.cost);
-            this.game.coins = this.game.saveSystem.getCoins();
-            this.game.saveSystem.unlockChar(char.id);
-            this.show();
-            this.game.menu.refresh();
-          }
-        };
       }
 
       grid.appendChild(card);
     }
+
+    el.querySelectorAll('.buy-char-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const charId = btn.dataset.char;
+        const char = CHARACTERS.find(c => c.id === charId);
+        if (char && this.game.coins >= char.cost) {
+          this.game.saveSystem.spendCoins(char.cost);
+          this.game.coins = this.game.saveSystem.getCoins();
+          this.game.saveSystem.unlockChar(charId);
+          this.show();
+          this.game.menu.refresh();
+        }
+      };
+    });
 
     document.getElementById('btn-select-char').onclick = () => {
       if (selectedId) {
