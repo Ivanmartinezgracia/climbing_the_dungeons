@@ -31,13 +31,14 @@ export class Dungeon {
 
     const roomPositions = [];
 
-    const startGR = this.rng.nextInt(0, roomGridH);
-    const startGC = this.rng.nextInt(0, roomGridW);
+    const startGR = this.rng.nextInt(0, roomGridH - 1);
+    const startGC = this.rng.nextInt(0, roomGridW - 1);
     roomPositions.push({ gr: startGR, gc: startGC, type: 'spawn' });
 
     const queue = [{ gr: startGR, gc: startGC }];
     const visited = new Set([`${startGR},${startGC}`]);
     const allRooms = [{ gr: startGR, gc: startGC }];
+    const parent = {}; // track BFS parents for corridors
 
     const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
 
@@ -55,6 +56,7 @@ export class Dungeon {
           visited.add(key);
           queue.push({ gr: nr, gc: nc });
           allRooms.push({ gr: nr, gc: nc });
+          parent[key] = `${current.gr},${current.gc}`;
           added = true;
           break;
         }
@@ -66,7 +68,7 @@ export class Dungeon {
     }
 
     const spawnIdx = allRooms.findIndex(r => r.gr === startGR && r.gc === startGC);
-    const bossIdx = this.rng.nextInt(1, allRooms.length - 1);
+    const bossIdx = allRooms.length > 1 ? this.rng.nextInt(1, allRooms.length - 1) : -1;
 
     for (let i = 0; i < allRooms.length; i++) {
       const r = allRooms[i];
@@ -83,16 +85,17 @@ export class Dungeon {
       this.rooms.push(room);
     }
 
+    // Connect each room to its BFS parent (guaranteed adjacent), not sequential allRooms order
     for (const r of allRooms) {
-      const idx = allRooms.indexOf(r);
-      if (idx >= 0 && idx + 1 < allRooms.length) {
-        const next = allRooms[idx + 1];
-        const cx = r.gc * (roomW + 3) + 2 + Math.floor(roomW / 2);
-        const cy = r.gr * (roomH + 3) + 2 + Math.floor(roomH / 2);
-        const nx = next.gc * (roomW + 3) + 2 + Math.floor(roomW / 2);
-        const ny = next.gr * (roomH + 3) + 2 + Math.floor(roomH / 2);
-        this.carveCorridor(cx, cy, nx, ny);
-      }
+      const key = `${r.gr},${r.gc}`;
+      const pKey = parent[key];
+      if (!pKey) continue; // spawn room has no parent
+      const [pgr, pgc] = pKey.split(',').map(Number);
+      const cx = r.gc * (roomW + 3) + 2 + Math.floor(roomW / 2);
+      const cy = r.gr * (roomH + 3) + 2 + Math.floor(roomH / 2);
+      const nx = pgc * (roomW + 3) + 2 + Math.floor(roomW / 2);
+      const ny = pgr * (roomH + 3) + 2 + Math.floor(roomH / 2);
+      this.carveCorridor(cx, cy, nx, ny);
     }
   }
 

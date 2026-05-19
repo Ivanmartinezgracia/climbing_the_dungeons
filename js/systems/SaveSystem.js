@@ -30,8 +30,8 @@ export class SaveSystem {
       coins: 0,
       unlockedChars: ['adventurer'],
       unlockedDungeons: ['catacombs'],
-      unlockedPets: ['dog', 'wolf', 'cat', 'crow'],
-      activePets: ['dog', 'wolf'],
+      unlockedPets: ['dog'],
+      activePets: ['dog'],
     };
   }
 

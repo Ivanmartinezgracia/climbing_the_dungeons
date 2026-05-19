@@ -132,6 +132,11 @@ export class Game {
     const mouseWY = this.input.mouse.y + this.camera.y;
     this.player.update(this.input, this.dungeon, mouseWX, mouseWY);
 
+    if (this.player.dead && this.state === GAME_STATES.PLAYING) {
+      this.onPlayerDeath();
+      return;
+    }
+
     if (this.input.isReloadJustPressed()) {
       this.player.reload();
     }
@@ -413,10 +418,8 @@ export class Game {
     this.autoSaveTimer++;
     if (this.autoSaveTimer >= 300) {
       this.autoSaveTimer = 0;
-      const saved = this.saveSystem.getCoins();
-      if (this.coins > saved) {
-        this.saveSystem.addCoins(this.coins - saved);
-      }
+      this.saveSystem.setCoins(this.coins);
+      this.coins = this.saveSystem.getCoins();
     }
 
     this.camera.follow(this.player?.pos, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -583,18 +586,34 @@ export class Game {
     this.dungeon = new Dungeon(dungeonDef, this.currentFloor);
     this.dungeon.generate();
 
+    console.log(`[Piso ${this.currentFloor}] Dungeon: ${this.dungeon.width}x${this.dungeon.height}, ${this.dungeon.rooms.length} salas, seed=${dungeonDef.id.charCodeAt(0) * 10000 + this.currentFloor * 777}`);
+
     const spawnRoom = this.dungeon.rooms.find(r => r.type === 'spawn');
+    if (!spawnRoom) {
+      console.error('[ERROR] No se encontró sala de spawn! Rooms:', this.dungeon.rooms.map(r => `${r.type}@(${r.x},${r.y})`));
+    }
     if (spawnRoom) {
       this.player.pos.x = spawnRoom.centerX * 16;
       this.player.pos.y = spawnRoom.centerY * 16;
+      console.log(`[Piso ${this.currentFloor}] Spawn room: center=(${spawnRoom.centerX},${spawnRoom.centerY}), pos=(${this.player.pos.x},${this.player.pos.y})`);
+      console.log(`[Piso ${this.currentFloor}] isSolid at spawn center: ${this.dungeon.isSolid(this.player.pos.x, this.player.pos.y, this.player.size)}`);
       if (this.dungeon.isSolid(this.player.pos.x, this.player.pos.y, this.player.size)) {
         let found = false;
-        for (let ty = spawnRoom.y; ty < spawnRoom.y + spawnRoom.h && !found; ty++) {
-          for (let tx = spawnRoom.x; tx < spawnRoom.x + spawnRoom.w && !found; tx++) {
-            if (!this.dungeon.isSolidTile(tx, ty)) {
-              this.player.pos.x = tx * 16 + 8;
-              this.player.pos.y = ty * 16 + 8;
-              found = true;
+        const ctrX = spawnRoom.x + Math.floor(spawnRoom.w / 2);
+        const ctrY = spawnRoom.y + Math.floor(spawnRoom.h / 2);
+        const maxRad = Math.max(spawnRoom.w, spawnRoom.h);
+        for (let rad = 0; rad <= maxRad && !found; rad++) {
+          for (let dy = -rad; dy <= rad && !found; dy++) {
+            for (let dx = -rad; dx <= rad && !found; dx++) {
+              if (Math.abs(dx) !== rad && Math.abs(dy) !== rad) continue;
+              const tx = ctrX + dx, ty = ctrY + dy;
+              if (tx >= spawnRoom.x && tx < spawnRoom.x + spawnRoom.w &&
+                  ty >= spawnRoom.y && ty < spawnRoom.y + spawnRoom.h &&
+                  !this.dungeon.isSolidTile(tx, ty)) {
+                this.player.pos.x = tx * 16 + 8;
+                this.player.pos.y = ty * 16 + 8;
+                found = true;
+              }
             }
           }
         }
@@ -613,7 +632,9 @@ export class Game {
           this.dungeon.tiles[Math.floor(this.dungeon.height / 2) * this.dungeon.width + Math.floor(this.dungeon.width / 2)] = 0;
           this.player.pos.x = Math.floor(this.dungeon.width / 2) * 16 + 8;
           this.player.pos.y = Math.floor(this.dungeon.height / 2) * 16 + 8;
+          console.warn('[WARN] Fallback 3 usado: se talló tile en centro del mapa');
         }
+        console.log(`[Piso ${this.currentFloor}] Posición final jugador: (${this.player.pos.x},${this.player.pos.y}), isSolid: ${this.dungeon.isSolid(this.player.pos.x, this.player.pos.y, this.player.size)}`);
       }
       if (this.player?.pets) {
         for (const pet of this.player.pets) {

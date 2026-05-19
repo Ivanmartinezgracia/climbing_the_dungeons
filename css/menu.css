@@ -102,7 +102,6 @@
 
 .char-card.locked {
   border-color: #332;
-  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -134,6 +133,19 @@
 .char-card .char-owned {
   color: #4c4;
   font-size: 0.75rem;
+}
+
+.buy-char-btn {
+  font-size: 0.75rem !important;
+  padding: 0.4rem 1rem !important;
+  min-width: auto !important;
+  border-color: #f0c040 !important;
+  color: #f0c040 !important;
+  background: rgba(240, 192, 64, 0.12) !important;
+}
+
+.buy-char-btn:hover {
+  background: rgba(240, 192, 64, 0.25) !important;
 }
 
 /* Dungeon Select */
