@@ -11,10 +11,12 @@ export class SaveSystem {
       const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(OLD_STORAGE_KEY);
       if (raw) {
         const data = JSON.parse(raw);
-        if (raw === localStorage.getItem(OLD_STORAGE_KEY)) {
-          localStorage.removeItem(OLD_STORAGE_KEY);
-          localStorage.setItem(STORAGE_KEY, raw);
-        }
+        try {
+          if (raw === localStorage.getItem(OLD_STORAGE_KEY)) {
+            localStorage.removeItem(OLD_STORAGE_KEY);
+            localStorage.setItem(STORAGE_KEY, raw);
+          }
+        } catch {}
         if (!data.unlockedPets) data.unlockedPets = ['dog', 'wolf', 'cat', 'crow'];
         if (!data.activePets) data.activePets = data.unlockedPets.slice(0, 2);
         return data;
@@ -45,6 +47,11 @@ export class SaveSystem {
 
   addCoins(amount) {
     this.data.coins += Math.max(0, amount);
+    this.#save();
+  }
+
+  setCoins(amount) {
+    this.data.coins = Math.max(0, amount);
     this.#save();
   }
 

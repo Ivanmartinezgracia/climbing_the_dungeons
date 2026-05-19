@@ -867,7 +867,7 @@ export class Game {
         this.particles.emit(bx, by, '#fd0', 12);
 
         if (this.currentFloor >= (dungeonDef?.floors ?? 15)) {
-          this.saveSystem.addCoins(this.coins);
+          this.saveSystem.setCoins(this.coins);
           this.coins = this.saveSystem.getCoins();
           this.state = GAME_STATES.VICTORY;
           this.victory.show();
@@ -1022,7 +1022,7 @@ export class Game {
     this.gameOver.show();
     this.hud.hide();
     this.minimap.hide();
-    this.saveSystem.addCoins(this.coins);
+    this.saveSystem.setCoins(this.coins);
     this.coins = this.saveSystem.getCoins();
   }
 
@@ -1035,6 +1035,7 @@ export class Game {
     this.hideFloorText();
     document.getElementById('pause-overlay')?.remove();
 
+    this.saveSystem.setCoins(this.coins);
     this.player = null;
     this.dungeon = null;
     this.enemies = [];
@@ -1114,6 +1115,7 @@ export class Game {
   }
 
   quitRun() {
+    this.saveSystem.setCoins(this.coins);
     document.getElementById('pause-overlay')?.remove();
     this.hud.hide();
     this.minimap.hide();
