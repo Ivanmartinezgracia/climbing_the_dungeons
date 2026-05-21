@@ -348,14 +348,14 @@ export class Enemy {
       ctx.fillStyle = '#fd0';
       ctx.font = '6px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('✦', sx + 8, sy - 4);
+      ctx.fillText('✦', sx + 8, sy - 7);
     }
 
     if (this.hp < this.maxHP && !this.dead) {
       ctx.fillStyle = '#400';
-      ctx.fillRect(sx, sy - 3, 16, 2);
+      ctx.fillRect(sx, sy - 6, 16, 2);
       ctx.fillStyle = this.isElite ? '#fd0' : '#f44';
-      ctx.fillRect(sx, sy - 3, 16 * (this.hp / this.maxHP), 2);
+      ctx.fillRect(sx, sy - 6, 16 * (this.hp / this.maxHP), 2);
     }
 
     ctx.restore();
