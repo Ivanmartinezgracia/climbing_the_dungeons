@@ -1,0 +1,680 @@
+/* Main Menu */
+.menu-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(40, 24, 20, 0.88) 0%, rgba(10, 6, 4, 0.94) 100%);
+  pointer-events: all;
+  z-index: 100;
+  font-family: 'Courier New', monospace;
+}
+
+.menu-screen h1 {
+  font-size: 3rem;
+  color: #f0c040;
+  text-shadow: 0 0 20px rgba(240, 192, 64, 0.5), 0 0 40px rgba(240, 192, 64, 0.2);
+  margin-bottom: 0.5rem;
+  letter-spacing: 4px;
+}
+
+.menu-screen .subtitle {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 2.5rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+
+.menu-btn {
+  background: transparent;
+  border: 2px solid #555;
+  color: #ccc;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  padding: 0.75rem 2.5rem;
+  margin: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 2px;
+  pointer-events: all;
+  min-width: 260px;
+  text-align: center;
+}
+
+.menu-btn:hover {
+  border-color: #f0c040;
+  color: #f0c040;
+  background: rgba(240, 192, 64, 0.08);
+}
+
+.menu-btn:disabled {
+  border-color: #333;
+  color: #444;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.menu-btn.locked {
+  border-color: #442;
+  color: #664;
+}
+
+.menu-btn.locked:hover {
+  border-color: #f0c040;
+  color: #f0c040;
+}
+
+/* Character Select */
+.char-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.char-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid #333;
+  padding: 1.2rem;
+  width: 180px;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.char-card:hover {
+  border-color: #f0c040;
+  background: rgba(240, 192, 64, 0.06);
+}
+
+.char-card.selected {
+  border-color: #f0c040;
+  background: rgba(240, 192, 64, 0.1);
+}
+
+.char-card.locked {
+  border-color: #332;
+  cursor: not-allowed;
+}
+
+.char-card .char-name {
+  color: #eee;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.char-card .char-desc {
+  color: #888;
+  font-size: 0.75rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+
+.char-card .char-stats {
+  color: #666;
+  font-size: 0.7rem;
+  margin-bottom: 0.3rem;
+}
+
+.char-card .char-cost {
+  color: #f0c040;
+  font-size: 0.75rem;
+}
+
+.char-card .char-owned {
+  color: #4c4;
+  font-size: 0.75rem;
+}
+
+.buy-char-btn {
+  font-size: 0.7rem !important;
+  padding: 0.35rem 0.5rem !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0.2rem 0 0 0 !important;
+  letter-spacing: 0 !important;
+  box-sizing: border-box !important;
+  border-color: #f0c040 !important;
+  color: #f0c040 !important;
+  background: rgba(240, 192, 64, 0.12) !important;
+}
+
+.buy-char-btn:hover {
+  background: rgba(240, 192, 64, 0.25) !important;
+}
+
+.buy-char-btn:disabled {
+  border-color: #665 !important;
+  color: #665 !important;
+  background: rgba(100, 100, 60, 0.08) !important;
+  cursor: not-allowed !important;
+}
+
+/* Dungeon Select */
+.dungeon-grid {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.dungeon-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid #333;
+  padding: 1rem;
+  width: 160px;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.dungeon-card:hover {
+  border-color: #f0c040;
+  background: rgba(240, 192, 64, 0.06);
+}
+
+.dungeon-card.locked {
+  border-color: #332;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dungeon-card .dungeon-name {
+  color: #eee;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.dungeon-card .dungeon-theme {
+  color: #888;
+  font-size: 0.7rem;
+  margin-bottom: 0.2rem;
+}
+
+.dungeon-card .dungeon-floors {
+  color: #666;
+  font-size: 0.7rem;
+}
+
+/* Back button */
+.back-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #777;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  padding: 0.4rem 1.2rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  border-color: #f0c040;
+  color: #f0c040;
+}
+
+/* HUD */
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hud-top {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.hud-health {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.heart {
+  width: 16px;
+  height: 16px;
+  background: #f04040;
+  clip-path: polygon(50% 15%, 61% 4%, 75% 4%, 85% 15%, 88% 28%, 50% 85%, 12% 28%, 15% 15%, 25% 4%, 39% 4%);
+}
+
+.heart.lost {
+  background: #333;
+}
+
+.hud-xp-bar {
+  width: 200px;
+  height: 6px;
+  background: #222;
+  border: 1px solid #444;
+  position: relative;
+  align-self: center;
+}
+
+.hud-xp-fill {
+  height: 100%;
+  background: #40c0f0;
+  transition: width 0.3s;
+}
+
+.hud-level {
+  color: #f0c040;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.hud-bullet-status {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #888;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.hud-coin {
+  color: #f0c040;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.hud-pause-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: 1px solid #555;
+  color: #888;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.hud-pause-btn:hover {
+  border-color: #f0c040;
+  color: #f0c040;
+}
+
+/* Upgrade Panel */
+.upgrade-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(26, 16, 16, 0.95) 0%, rgba(0, 0, 0, 0.97) 100%);
+  border: 2px solid #f0c040;
+  padding: 2rem;
+  z-index: 50;
+  pointer-events: all;
+  min-width: 500px;
+  text-align: center;
+}
+
+.upgrade-panel h2 {
+  color: #f0c040;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.upgrade-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.upgrade-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid #444;
+  padding: 1rem;
+  width: 140px;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.2s;
+}
+
+.upgrade-card:hover {
+  border-color: #f0c040;
+  background: rgba(240, 192, 64, 0.08);
+}
+
+.upgrade-card .upgrade-name {
+  color: #eee;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.upgrade-card .upgrade-desc {
+  color: #888;
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+
+/* Game Over */
+.gameover-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(40, 10, 10, 0.95) 0%, rgba(0, 0, 0, 0.97) 100%);
+  pointer-events: all;
+  z-index: 100;
+}
+
+.gameover-screen h1 {
+  font-size: 2.5rem;
+  color: #f04040;
+  text-shadow: 0 0 20px rgba(240, 64, 64, 0.5);
+  margin-bottom: 1rem;
+  letter-spacing: 4px;
+}
+
+.gameover-stats {
+  color: #888;
+  font-size: 0.85rem;
+  line-height: 2;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.gameover-stats span {
+  color: #eee;
+}
+
+/* Victory Screen */
+.victory-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(10, 20, 10, 0.95) 0%, rgba(0, 0, 0, 0.97) 100%);
+  pointer-events: all;
+  z-index: 100;
+}
+
+.victory-screen h1 {
+  font-size: 3rem;
+  color: #f0c040;
+  text-shadow: 0 0 30px rgba(240, 192, 64, 0.6), 0 0 60px rgba(240, 192, 64, 0.3);
+  margin-bottom: 0.5rem;
+  letter-spacing: 8px;
+  animation: victoryPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes victoryPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.victory-subtitle {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 1.5rem;
+  letter-spacing: 4px;
+}
+
+/* Pause Overlay */
+.pause-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  pointer-events: all;
+  z-index: 90;
+}
+
+.pause-overlay h1 {
+  font-size: 2.5rem;
+  color: #888;
+  letter-spacing: 8px;
+  margin-bottom: 2rem;
+}
+
+/* Floor Transition */
+.floor-transition {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #f0c040;
+  font-size: 2rem;
+  letter-spacing: 6px;
+  text-shadow: 0 0 20px rgba(240, 192, 64, 0.5);
+  pointer-events: none;
+  z-index: 80;
+  animation: fadeInOut 1.5s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  30% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+/* Enemy projectile indicator */
+.enemy-bullet {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* HUD Weapon */
+.hud-weapon {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  color: #ddd;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  background: rgba(0,0,0,0.5);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #444;
+}
+
+.hud-ammo {
+  color: #f0c040;
+}
+
+/* Minimap */
+.minimap {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: 1px solid #444;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 11;
+  pointer-events: none;
+}
+
+/* Pet Shop */
+.pet-shop-grid {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1rem 0;
+  max-width: 700px;
+}
+
+.pet-shop-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid #333;
+  padding: 1rem;
+  width: 140px;
+  text-align: center;
+}
+
+.pet-shop-card.owned {
+  border-color: #4a4;
+  background: rgba(68, 170, 68, 0.06);
+}
+
+.pet-shop-icon {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.pet-shop-name {
+  color: #eee;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.pet-shop-stats {
+  color: #888;
+  font-size: 0.7rem;
+  margin-bottom: 0.2rem;
+}
+
+.pet-shop-type {
+  color: #666;
+  font-size: 0.7rem;
+  margin-bottom: 0.4rem;
+}
+
+.pet-owned-badge {
+  color: #4c4;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.pet-shop-coins {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.pet-buy-btn {
+  font-size: 0.75rem !important;
+  padding: 0.4rem 1rem !important;
+  min-width: auto !important;
+}
+
+.pet-active-badge {
+  color: #4c4;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.3rem;
+  border: 1px solid #4a4;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.pet-active-badge:hover {
+  background: rgba(68, 170, 68, 0.15);
+}
+
+.pet-select-btn {
+  color: #f0c040;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.3rem;
+  border: 1px solid #f0c040;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.pet-select-btn:hover {
+  background: rgba(240, 192, 64, 0.15);
+}
+
+.pet-select-btn.disabled {
+  color: #555;
+  border-color: #444;
+  cursor: not-allowed;
+}
+
+.pet-shop-card.active {
+  border-color: #4a4;
+  background: rgba(68, 170, 68, 0.1);
+}
+
+.pet-shop-info {
+  color: #888;
+  font-size: 0.8rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+/* Pet Guide */
+#menu-pet-guide {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+#menu-pet-guide h2 {
+  color: #f0c040;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  margin-bottom: 0.3rem;
+}
+#menu-pet-guide::-webkit-scrollbar {
+  width: 4px;
+}
+#menu-pet-guide::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 2px;
+}
+
+/* Pause upgrades list */
+#pause-upgrades-list {
+  max-height: 300px;
+  overflow-y: auto;
+  width: 320px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid #333;
+  padding: 0.5rem;
+}
+#pause-upgrades-list::-webkit-scrollbar {
+  width: 4px;
+}
+#pause-upgrades-list::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 2px;
+}
